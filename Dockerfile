@@ -2,7 +2,8 @@ FROM ubuntu:16.04
 MAINTAINER KnightWhoSayNi (threeheadedknight@protonmail.com)
 
 RUN apt-get update -qq && \
-    apt-get -y upgrade -qq
+    apt-get -y upgrade -qq && \
+    apt-get install -y apt-transport-https
 RUN apt-get install -y make bash git unzip wget curl openjdk-8-jdk build-essential autoconf nano tree
 
 ENV ANDROID_SDK_VERSION 4333796
@@ -17,8 +18,8 @@ RUN wget --no-check-certificate -q ${ANDROID_SDK_URL} && \
 
 ENV PATH=${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/tools/bin:${ANDROID_SDK_HOME}/platform-tools
 
-RUN yes | sdkmanager --licenses
-RUN yes | sdkmanager "platforms;android-24"
+RUN yes | sdkmanager --licenses --proxy=http --proxy_host=10.193.21.110 --proxy_port=8080
+RUN yes | sdkmanager "platforms;android-24" --proxy=http --proxy_host=10.193.21.110 --proxy_port=8080
 
 ENV ANDROID_NDK_VERSION r19
 ENV ANDROID_NDK_HOME /opt/android-ndk
@@ -57,6 +58,7 @@ RUN cd /tmp/iperf-2.0.5 && \
     ./configure
 
 # iPerf 2.0.10
+### installed on expelloai
 
 RUN cd /tmp && \
     wget --no-check-certificate -q https://astuteinternet.dl.sourceforge.net/project/iperf2/iperf-2.0.10.tar.gz && \
@@ -111,6 +113,7 @@ RUN cd /tmp/iperf-2.0.13 && \
 COPY /iperf-2.0.13/config.h /tmp/iperf-2.0.13
 
 # iPerf 3.1.6
+### installed on expelloai
 
 RUN cd /tmp && \
     wget --no-check-certificate -q https://downloads.es.net/pub/iperf/iperf-3.1.6.tar.gz && \
@@ -251,6 +254,19 @@ RUN cd /tmp && \
 
 COPY /iperf-3.9/Android.mk /tmp/iperf-3.9
 RUN cd /tmp/iperf-3.9 && \
+    autoconf && \
+    ./configure
+
+# netperf
+
+RUN cd /tmp && \
+    mkdir /tmp/netperf && \
+    wget --no-check-certificate -q https://android.googlesource.com/platform/external/netperf/+archive/refs/heads/master.tar.gz && \
+    tar -zxvf master.tar.gz -C /tmp/netperf && \
+    rm -f master.tar.gz
+
+COPY /netperf-2.7/Android.mk /tmp/netperf
+RUN cd /tmp/netperf && \
     autoconf && \
     ./configure
 

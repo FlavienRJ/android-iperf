@@ -40,6 +40,11 @@
 | `3.8.1`     | 2020-06-10 | [Source Code](https://downloads.es.net/pub/iperf/iperf-3.8.1.tar.gz)  |
 | `3.9`     | 2020-08-17 | [Source Code](https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz)  |
 
+#### Netperf
+
+| Version | Release day | Source Code |
+|---------|:-----------:|------------:|
+| `2.7`   | 2018-02-13 | [Source_Code](https://android.googlesource.com/platform/external/netperf/+/refs/heads/master) |
 
 ### Download
 
@@ -113,6 +118,10 @@ Executing `iPerf3`
 adb shell /data/local/tmp/iperf3 <IPERF_ARGUMENTS>
 ```
 
+Executing `netserver`
+```shell
+adb shell /data/local/tmp/netserver -V
+```
 
 ## License
 
